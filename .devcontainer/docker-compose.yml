@@ -1,0 +1,50 @@
+x-common-config: &common-config
+  image: "artifacts.iflytek.com/docker-private/aiaas/venv:ubuntu22.04-mc"
+  pull_policy: always
+  restart: "no"
+  privileged: true
+  ulimits:
+    memlock: -1
+    stack: -1
+    core: 0
+    nproc: 65535
+    nofile:
+      soft: 65535
+      hard: 65535
+  cap_add:
+    - SYS_PTRACE
+    - NET_RAW
+    - NET_ADMIN
+  security_opt:
+    - seccomp=unconfined
+  ipc: host
+  network_mode: host
+  devices:
+    - "/dev/infiniband/uverbs0:/dev/infiniband/uverbs0"
+    - "/dev/infiniband/rdma_cm:/dev/infiniband/rdma_cm"
+  volumes:
+    - /mnt:/mnt:rw
+    - /sqjian/.ssh:/root/.ssh:rw
+    - /var/run/docker.sock:/var/run/docker.sock:rw
+    - uv_cache:/root/.cache/uv
+    - uv_python:/root/.local/share/uv/python
+    - vscode_extensions:/root/.vscode-server/extensions
+    - linuxbrew:/home/linuxbrew
+    - /mnt/ramdisk:/mnt/ramdisk:rw
+    - /root/.local/share/fish/fish_history:/root/.local/share/fish/fish_history:rw
+    - ../../:/workspaces
+
+services:
+  workspace:
+    <<: *common-config
+    container_name: mooncake-devcontainer
+    entrypoint: ["bash", "-l", "-c"]
+    command:
+      - |
+        sleep infinity
+
+volumes:
+  uv_cache: { external: true }
+  uv_python: { external: true }
+  vscode_extensions: { external: true }
+  linuxbrew: { external: true }
