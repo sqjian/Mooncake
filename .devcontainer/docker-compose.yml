@@ -1,5 +1,13 @@
 x-common-config: &common-config
-  image: "artifacts.iflytek.com/docker-private/aiaas/venv:ubuntu22.04-mc"
+  # build:
+  #   context: ./../
+  #   dockerfile: ./.devcontainer/mooncake.dockerfile
+  #   network: host
+  #   args:
+  #     - HTTP_PROXY=http://127.0.0.1:7890
+  #     - HTTPS_PROXY=http://127.0.0.1:7890
+  #     - ALL_PROXY=socks5://127.0.0.1:7890
+  image: "artifacts.iflytek.com/docker-private/aiaas/venv:mooncake"
   pull_policy: always
   restart: "no"
   privileged: true
